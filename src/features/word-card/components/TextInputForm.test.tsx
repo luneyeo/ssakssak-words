@@ -20,12 +20,12 @@ describe("TextInputForm", () => {
     const user = userEvent.setup();
     const { handleSubmit, textarea, select, button } = renderForm();
 
-    await user.type(textarea, "  Hola  ");
-    await user.selectOptions(select, "스페인어");
+    await user.type(textarea, "  Hallo  ");
+    await user.selectOptions(select, "독일어");
     await user.click(button);
 
     expect(handleSubmit).toHaveBeenCalledTimes(1);
-    expect(handleSubmit).toHaveBeenCalledWith({ text: "Hola", language: "스페인어" });
+    expect(handleSubmit).toHaveBeenCalledWith({ text: "Hallo", language: "독일어" });
   });
 
   it("글이 비어 있으면 담을 수 없다", async () => {

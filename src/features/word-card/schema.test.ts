@@ -80,7 +80,7 @@ describe("generateCardsRequestSchema", () => {
 
   it.each([
     ["빈 글", { text: "   ", language: "영어" }],
-    ["지원하지 않는 언어", { text: "Hallo", language: "독일어" }],
+    ["지원하지 않는 언어", { text: "Hola", language: "스페인어" }],
     ["문자열이 아닌 글", { text: 1, language: "영어" }],
     ["빈 요청", null],
   ])("%s은(는) 거부한다", (_, body) => {

@@ -88,10 +88,10 @@ describe("그 외의 글", () => {
     expect(await generate(text)).toHaveLength(MAX_WORDS);
   });
 
-  it("스페인어와 일본어 글에서도 카드를 만든다", async () => {
-    expect(await generateWords("El niño está en la montaña.", "스페인어")).toEqual([
-      "niño",
-      "montaña",
+  it("독일어와 일본어 글에서도 카드를 만든다", async () => {
+    expect(await generateWords("Das Mädchen ist auf der Straße.", "독일어")).toEqual([
+      "Mädchen",
+      "Straße",
     ]);
     expect(await generateWords("天気がいい。散歩しよう。", "일본어")).toEqual([
       "天気がいい",

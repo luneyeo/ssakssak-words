@@ -46,7 +46,7 @@ describe("POST /api/cards", () => {
 
   it.each([
     ["빈 글", { text: "  ", language: "영어" }],
-    ["지원하지 않는 언어", { text: "Hallo", language: "독일어" }],
+    ["지원하지 않는 언어", { text: "Hola", language: "스페인어" }],
     ["JSON이 아닌 요청", "not json"],
   ])("%s이면 INVALID_INPUT", async (_, body) => {
     await expectError(await post(body), 400, "INVALID_INPUT");
