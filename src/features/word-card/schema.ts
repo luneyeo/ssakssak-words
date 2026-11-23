@@ -43,6 +43,14 @@ export const cardSetSchema = z.object({
   createdAt: z.iso.datetime(),
 }) satisfies z.ZodType<CardSet>;
 
+export const cardsApiSuccessSchema = cardResponseSchema.extend({
+  provider: z.enum(["mock", "gemini"]),
+});
+
+export const cardsApiErrorSchema = z.object({
+  error: z.object({ message: z.string().min(1) }),
+});
+
 // 글자 수 초과는 별도 에러 코드(TEXT_TOO_LONG)로 응답해야 해서 여기서는 검사하지 않는다
 export const generateCardsRequestSchema = z.object({
   text: z.string().trim().min(1),
