@@ -1,0 +1,23 @@
+import type { ReactNode } from "react";
+import type { Metadata } from "next";
+
+import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
+
+import "./globals.css";
+
+export const metadata: Metadata = {
+  title: "싹싹단어",
+  description: "글 속 단어를 싹싹 쓸어 담아 드려요",
+};
+
+type RootLayoutProps = {
+  children: ReactNode;
+};
+
+export default function RootLayout({ children }: RootLayoutProps) {
+  return (
+    <html lang="ko">
+      <body className="font-sans antialiased">{children}</body>
+    </html>
+  );
+}
