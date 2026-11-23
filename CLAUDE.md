@@ -95,6 +95,8 @@ src/
 │     │  ├─ DemoArticlePicker.tsx  # "예시 글로 체험하기"
 │     │  ├─ GenerateStatus.tsx     # 로딩·결과·빈 상태·에러 문구
 │     │  ├─ CardResult.tsx         # 원문 하이라이트 + 카드 목록
+│     │  ├─ SavedCardSets.tsx      # 저장한 세트 목록, 삭제
+│     │  ├─ SavedCardSetItem.tsx
 │     │  ├─ CardGrid.tsx
 │     │  ├─ WordCard.tsx
 │     │  ├─ WordCardList.tsx
@@ -106,6 +108,7 @@ src/
 │     │  ├─ useGenerateCards.ts
 │     │  └─ useSavedCards.ts
 │     ├─ constants.ts          # 글자 수 제한, 지원 언어
+│     ├─ savedCardSets.ts      # 카드 세트 저장·삭제·읽기
 │     ├─ schema.ts             # zod 스키마
 │     └─ types.ts
 ├─ lib/
@@ -124,7 +127,7 @@ src/
 │  ├─ text.ts                  # 하이라이트용 텍스트 유틸
 │  └─ cn.ts                    # 조건부 className 유틸
 └─ components/
-   └─ ui/                      # Button, Textarea, Select, Spinner, Chip 등 공용 UI
+   └─ ui/                      # Button, Textarea, Select, Spinner, Chip, TextLink 등 공용 UI
 docs/
 └─ word-card-prompt.md         # 프롬프트·스키마 원본 명세
 ```
