@@ -130,6 +130,7 @@ src/
    └─ ui/                      # Button, Textarea, Select, Spinner, Chip, TextLink 등 공용 UI
 docs/
 └─ word-card-prompt.md         # 프롬프트·스키마 원본 명세
+.coderabbit.yaml               # CodeRabbit 코드 리뷰 설정
 ```
 
 - 기능에 속한 코드는 `features/<기능>/` 아래에 둡니다.

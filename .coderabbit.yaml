@@ -1,0 +1,98 @@
+# yaml-language-server: $schema=https://www.coderabbit.ai/integrations/schema.v2.json
+
+language: ko-KR
+tone_instructions: >-
+  친근한 존댓말로 간결하게 리뷰해 주세요. 무엇이 왜 문제인지와 실제로 일어나는 상황을 먼저 쓰고,
+  고칠 방법을 짧은 코드로 제안해 주세요. 취향 차이나 포맷팅은 지적하지 마세요.
+
+reviews:
+  profile: chill
+  # 혼자 작업하는 저장소라 병합을 막지 않고 의견만 받는다
+  request_changes_workflow: false
+  suggested_reviewers: false
+  suggested_labels: false
+  poem: false
+  in_progress_fortune: false
+
+  auto_review:
+    enabled: true
+    drafts: false
+    auto_incremental_review: true
+
+  # 주의: 여기서 제외한 파일은 체크아웃도 되지 않으므로 *.md를 넣으면 CLAUDE.md를 읽지 못한다
+  path_filters:
+    - "!pnpm-lock.yaml"
+
+  path_instructions:
+    - path: "src/**/*.{ts,tsx}"
+      instructions: |
+        - 로드맵의 "이후 범위" 기능(학습 모드, 난이도, SRS, 긴 글 분할, 다크 모드, 로그인)을 구현하라고 제안하지 마세요.
+        - CLAUDE.md 2장에 없는 패키지를 추가하라고 제안하지 마세요.
+        - 외부에서 들어온 데이터(AI 응답, localStorage, 요청 body, API 응답)가 zod 검증 없이 쓰이는지 확인해 주세요.
+        - 독스트링이나 코드를 그대로 읽어 주는 주석을 요구하지 마세요.
+
+    - path: "src/lib/ai/**"
+      instructions: |
+        - providers/*와 index.ts 첫 줄에 `import "server-only"`가 있는지 확인해 주세요.
+        - 제공자별 코드에는 SDK 호출 방식의 차이만 있어야 합니다. 프롬프트, 스키마, 후처리는 공통 모듈을 써야 합니다.
+        - 제공자 내부 에러가 공통 에러 코드(CardGenerationError)로 바뀌는지 확인해 주세요.
+        - AI_PROVIDER가 없거나 API 키가 비어 있을 때 mock으로 동작하는지 확인해 주세요.
+        - `!error:<코드>` 기능은 mock에서만 동작해야 합니다.
+        - API 키에 NEXT_PUBLIC_ 접두사를 쓰거나, 로그에 사용자 원문이나 키를 남기면 심각한 문제로 지적해 주세요.
+
+    - path: "src/app/api/**"
+      instructions: |
+        - 요청 body를 zod로 검증하는지, 에러 코드와 HTTP 상태가 CLAUDE.md 4장의 표와 같은지 확인해 주세요.
+        - 응답이나 로그에 내부 에러 메시지, 사용자 원문, API 키가 드러나지 않는지 확인해 주세요.
+
+    - path: "src/**/*.tsx"
+      instructions: |
+        - 화면 코드가 AI 제공자나 SDK를 직접 import하지 않고 /api/cards만 호출하는지 확인해 주세요.
+        - state를 직접 수정하는 코드(push, splice, sort, reverse, 속성 대입)가 있는지 확인해 주세요.
+        - 색상은 globals.css의 디자인 토큰만 써야 합니다. hex 값이나 Tailwind 기본 색상을 쓰면 지적해 주세요.
+        - 접근성을 확인해 주세요: 키보드 조작, 보이는 focus 스타일, aria 속성, prefers-reduced-motion, WCAG AA 대비.
+        - 사용자에게 보이는 문구는 "~해요" 체의 한국어여야 합니다.
+        - 근거 없는 useMemo, useCallback을 제안하지 마세요.
+
+    - path: "src/lib/storage.ts"
+      instructions: |
+        - localStorage는 이 파일에서만 접근해야 합니다.
+        - 저장소 접근 불가, 용량 초과, 깨진 데이터에도 앱이 멈추지 않는지 확인해 주세요.
+
+    - path: "src/features/word-card/demo/**"
+      instructions: |
+        - 영어 카드의 뜻이 원문 문맥과 맞는지, 예문이 자연스러운지, 번역이 정확한지 확인해 주세요.
+        - 품사와 기본형(lemma)이 맞는지, 학습할 단어가 빠지지 않았는지 확인해 주세요.
+
+    - path: "**/*.test.{ts,tsx}"
+      instructions: |
+        - 테스트 러너는 Jest만 씁니다. Vitest 문법이나 다른 러너를 제안하지 마세요.
+        - 실제 AI API나 네트워크를 호출하는 테스트가 있으면 지적해 주세요.
+        - 항상 통과하는 검증, 구현을 그대로 옮긴 검증, 빠진 경계값이 있는지 확인해 주세요.
+
+    - path: "package.json"
+      instructions: |
+        - `typescript`(6 호환 패키지)와 `@typescript/native`(7)를 함께 설치한 것은 의도한 구성입니다. 하나로 합치라고 제안하지 마세요.
+
+  pre_merge_checks:
+    title:
+      mode: warning
+      requirements: "Conventional Commits 형식(feat, fix, refactor, style, test, docs, chore)에 한국어 설명을 씁니다. 예: 'feat: 단어 카드 뒤집기 애니메이션 추가'"
+
+  tools:
+    # 문서와 문구가 한국어라 맞지 않는 지적이 많아 끈다
+    languagetool:
+      enabled: false
+    markdownlint:
+      enabled: false
+
+chat:
+  auto_reply: true
+
+knowledge_base:
+  code_guidelines:
+    enabled: true
+    # CLAUDE.md는 기본으로 읽으므로, AI 코드에만 적용할 프롬프트 명세를 더한다
+    filePatterns:
+      - files: "docs/word-card-prompt.md"
+        applyTo: "src/lib/ai/**,src/features/word-card/schema.ts"
