@@ -16,7 +16,7 @@ type RootLayoutProps = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="ko">
+    <html lang="ko" className="motion-safe:scroll-smooth" data-scroll-behavior="smooth">
       <body className="font-sans antialiased">{children}</body>
     </html>
   );
