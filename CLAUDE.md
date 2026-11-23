@@ -47,7 +47,7 @@
 | 상태 관리 | React state + 커스텀 훅 (전역 상태 라이브러리는 필요할 때 확인 후 도입) |
 | 저장 | localStorage (`src/lib/storage.ts`를 통해서만 접근) |
 | 테스트 | **Jest** + React Testing Library (`next/jest`로 설정) |
-| 린트·포맷 | ESLint + Prettier |
+| 린트·포맷 | ESLint + Prettier (import 순서는 `eslint-plugin-import-x`로 검사) |
 | 패키지 매니저 | pnpm |
 | 배포 | Vercel (Hobby 플랜) |
 
@@ -90,8 +90,12 @@ src/
 ├─ features/
 │  └─ word-card/
 │     ├─ components/
+│     │  ├─ WordCardWorkspace.tsx  # 입력부터 결과까지 화면 조립
 │     │  ├─ TextInputForm.tsx
 │     │  ├─ DemoArticlePicker.tsx  # "예시 글로 체험하기"
+│     │  ├─ GenerateStatus.tsx     # 로딩·결과·빈 상태·에러 문구
+│     │  ├─ CardResult.tsx         # 원문 하이라이트 + 카드 목록
+│     │  ├─ CardGrid.tsx
 │     │  ├─ WordCard.tsx
 │     │  ├─ WordCardList.tsx
 │     │  ├─ WordCardSkeleton.tsx
@@ -120,7 +124,7 @@ src/
 │  ├─ text.ts                  # 하이라이트용 텍스트 유틸
 │  └─ cn.ts                    # 조건부 className 유틸
 └─ components/
-   └─ ui/                      # Button, Textarea, Select, Spinner 등 공용 UI
+   └─ ui/                      # Button, Textarea, Select, Spinner, Chip 등 공용 UI
 docs/
 └─ word-card-prompt.md         # 프롬프트·스키마 원본 명세
 ```
