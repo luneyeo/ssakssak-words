@@ -2,6 +2,7 @@ import { act, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { WordCardWorkspace } from "@/features/word-card/components/WordCardWorkspace";
+import { parseCardSets, readRawCardSets } from "@/features/word-card/savedCardSets";
 import type { GeneratedCard } from "@/lib/ai/types";
 
 const CARD: GeneratedCard = {
@@ -33,9 +34,14 @@ function getCards() {
   return within(screen.getByRole("region", { name: "단어 카드" })).getAllByRole("button");
 }
 
+function getSavedCardSets() {
+  return parseCardSets(readRawCardSets());
+}
+
 const originalFetch = globalThis.fetch;
 
 beforeEach(() => {
+  window.localStorage.clear();
   fetchMock.mockReset();
   globalThis.fetch = fetchMock;
   Element.prototype.scrollIntoView = jest.fn();
@@ -48,6 +54,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  jest.restoreAllMocks();
   globalThis.fetch = originalFetch;
 });
 
@@ -132,6 +139,57 @@ describe("직접 입력", () => {
 
     expect(screen.getByRole("status")).toHaveTextContent("단어 5개를 싹싹 담았어요!");
     expect(fetchMock.mock.calls[0][1].signal.aborted).toBe(true);
+  });
+});
+
+describe("저장", () => {
+  it("직접 만든 카드를 저장한다", async () => {
+    fetchMock.mockResolvedValue(mockResponse({ cards: [CARD], provider: "mock" }));
+    await submitText();
+    await screen.findByText("단어 1개를 싹싹 담았어요!");
+
+    expect(getSavedCardSets()).toEqual([
+      expect.objectContaining({
+        title: "The weather is gorgeous.",
+        isDemo: false,
+        cards: [expect.objectContaining(CARD)],
+      }),
+    ]);
+  });
+
+  it("예시 글은 여러 번 골라도 한 번만 저장한다", async () => {
+    const user = userEvent.setup();
+    await user.click(screen.getByRole("button", { name: "짧은 문장" }));
+    await user.click(screen.getByRole("button", { name: "뉴스 한 단락" }));
+    await user.click(screen.getByRole("button", { name: "짧은 문장" }));
+
+    expect(getSavedCardSets().map(({ id, isDemo }) => [id, isDemo])).toEqual([
+      ["demo-short", true],
+      ["demo-news", true],
+    ]);
+  });
+
+  it("담을 단어가 없거나 실패하면 저장하지 않는다", async () => {
+    fetchMock.mockResolvedValueOnce(mockResponse({ cards: [], provider: "mock" }));
+    await submitText("I am in it.");
+    await screen.findByText("이 글에서는 담을 단어를 찾지 못했어요");
+
+    fetchMock.mockRejectedValueOnce(new TypeError("Failed to fetch"));
+    await submitText(" Again.");
+    await screen.findByRole("alert");
+
+    expect(getSavedCardSets()).toEqual([]);
+  });
+
+  it("저장하지 못해도 카드는 보여 주고 안내한다", async () => {
+    jest.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+      throw new DOMException("full", "QuotaExceededError");
+    });
+    const user = userEvent.setup();
+    await user.click(screen.getByRole("button", { name: "짧은 문장" }));
+
+    expect(screen.getByRole("alert")).toHaveTextContent("카드를 저장하지 못했어요");
+    expect(getCards()).toHaveLength(5);
   });
 });
 

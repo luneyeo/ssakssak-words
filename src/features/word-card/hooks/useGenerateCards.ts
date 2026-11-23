@@ -12,7 +12,7 @@ type SettledState =
 
 export type GenerateCardsState = { status: "idle" } | { status: "loading" } | SettledState;
 
-export function useGenerateCards() {
+export function useGenerateCards(onSuccess: (cardSet: CardSet) => void) {
   const [state, setState] = useState<GenerateCardsState>({ status: "idle" });
   const controllerRef = useRef<AbortController | null>(null);
 
@@ -32,12 +32,16 @@ export function useGenerateCards() {
     const nextState = await requestCards(input, controller.signal);
 
     // 기다리는 사이 예시 글을 고르거나 다시 요청했다면, 늦게 온 결과가 새 화면을 덮지 않게 한다
-    if (!controller.signal.aborted) setState(nextState);
+    if (controller.signal.aborted) return;
+    setState(nextState);
+    if (nextState.status === "success") onSuccess(nextState.cardSet);
   }
 
-  function showDemo(cardSet: CardSet) {
+  function showDemo(demoCardSet: CardSet) {
     cancelRequest();
+    const cardSet = { ...demoCardSet, createdAt: new Date().toISOString() };
     setState({ status: "success", cardSet, isDemoMode: false });
+    onSuccess(cardSet);
   }
 
   return { state, generateCards, showDemo };
