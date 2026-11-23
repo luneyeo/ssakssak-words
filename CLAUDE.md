@@ -101,17 +101,20 @@ src/
 │     ├─ hooks/
 │     │  ├─ useGenerateCards.ts
 │     │  └─ useSavedCards.ts
+│     ├─ constants.ts          # 글자 수 제한, 지원 언어
 │     ├─ schema.ts             # zod 스키마
 │     └─ types.ts
 ├─ lib/
 │  ├─ ai/
 │  │  ├─ types.ts              # WordCardProvider 인터페이스
+│  │  ├─ errors.ts             # 에러 코드, HTTP 상태, 안내 문구
 │  │  ├─ index.ts              # getWordCardProvider(): 환경 변수로 제공자 선택
 │  │  ├─ prompts.ts            # 시스템 프롬프트, 사용자 메시지 템플릿 (제공자 공통)
 │  │  ├─ cardJsonSchema.ts     # 응답 JSON 스키마 (제공자 공통)
 │  │  ├─ postprocess.ts        # zod 검증, lemma 중복 제거 (제공자 공통)
 │  │  └─ providers/
 │  │     ├─ mock.ts            # Phase 1
+│  │     ├─ mockFunctionWords.ts  # mock이 제외할 기능어 목록
 │  │     └─ gemini.ts          # Phase 4
 │  ├─ storage.ts               # localStorage 래퍼
 │  ├─ text.ts                  # 하이라이트용 텍스트 유틸
