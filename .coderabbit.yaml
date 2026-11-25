@@ -26,8 +26,8 @@ reviews:
   path_instructions:
     - path: "src/**/*.{ts,tsx}"
       instructions: |
-        - 로드맵의 "이후 범위" 기능(학습 모드, 난이도, SRS, 긴 글 분할, 다크 모드, 로그인)을 구현하라고 제안하지 마세요.
-        - CLAUDE.md 2장에 없는 패키지를 추가하라고 제안하지 마세요.
+        - CLAUDE.md 1장의 "이후 범위" 기능(학습 모드, 난이도, SRS, 긴 글 분할, 다크 모드, 로그인)을 구현하라고 제안하지 마세요.
+        - docs/ARCHITECTURE.md 6장에 없는 패키지를 추가하라고 제안하지 마세요.
         - 외부에서 들어온 데이터(AI 응답, localStorage, 요청 body, API 응답)가 zod 검증 없이 쓰이는지 확인해 주세요.
         - 독스트링이나 코드를 그대로 읽어 주는 주석을 요구하지 마세요.
 
@@ -42,7 +42,7 @@ reviews:
 
     - path: "src/app/api/**"
       instructions: |
-        - 요청 body를 zod로 검증하는지, 에러 코드와 HTTP 상태가 CLAUDE.md 4장의 표와 같은지 확인해 주세요.
+        - 요청 body를 zod로 검증하는지, 에러 코드와 HTTP 상태가 docs/ARCHITECTURE.md 4장의 표와 같은지 확인해 주세요.
         - 응답이나 로그에 내부 에러 메시지, 사용자 원문, API 키가 드러나지 않는지 확인해 주세요.
 
     - path: "src/**/*.tsx"
@@ -92,7 +92,13 @@ chat:
 knowledge_base:
   code_guidelines:
     enabled: true
-    # CLAUDE.md는 기본으로 읽으므로, AI 코드에만 적용할 프롬프트 명세를 더한다
+    # CLAUDE.md와 AGENTS.md는 기본으로 읽으므로, 나머지 문서를 해당 코드에만 더한다
     filePatterns:
-      - files: "docs/word-card-prompt.md"
-        applyTo: "src/lib/ai/**,src/features/word-card/schema.ts"
+      - files: "docs/CONVENTIONS.md"
+        applyTo: "src/**/*.ts,src/**/*.tsx"
+      - files: "docs/ARCHITECTURE.md"
+        applyTo: "src/**,package.json"
+      - files: "docs/DESIGN.md"
+        applyTo: "src/**/*.tsx,src/app/globals.css"
+      - files: "docs/DEVELOPMENT.md"
+        applyTo: "src/lib/ai/**,.env.example"
