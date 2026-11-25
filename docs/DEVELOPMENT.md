@@ -7,13 +7,16 @@ AI 에이전트용 명령어·환경 변수 명세. 어떤 장을 읽을지는 `
 적용: `package.json`의 `scripts`, 실행·검사
 
 ```bash
-pnpm dev         # 개발 서버
-pnpm build       # 프로덕션 빌드
-pnpm lint        # ESLint
-pnpm typecheck   # tsc --noEmit
-pnpm test        # Jest
-pnpm format      # Prettier
+pnpm dev           # 개발 서버
+pnpm build         # 프로덕션 빌드
+pnpm lint          # ESLint
+pnpm typecheck     # tsc --noEmit
+pnpm test          # Jest
+pnpm format        # Prettier로 고치기
+pnpm format:check  # Prettier 검사만
 ```
+
+- CI(`.github/workflows/ci.yml`)는 `main` push와 `main` 대상 PR에서 lint, format:check, test, build, typecheck를 실행한다.
 
 ## 2. 환경 변수
 
