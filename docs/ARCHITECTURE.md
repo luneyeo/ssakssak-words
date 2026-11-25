@@ -63,7 +63,9 @@ docs/
 AGENTS.md                      # 작업 규칙, 상황별로 읽을 문서 안내
 CLAUDE.md                      # 프로젝트 범위
 .coderabbit.yaml               # CodeRabbit 코드 리뷰 설정
-.github/workflows/ci.yml       # GitHub Actions 검사
+.github/
+├─ pull_request_template.md    # PR 본문 템플릿
+└─ workflows/ci.yml            # GitHub Actions 검사
 README.md                      # 프로젝트 소개, 실행 방법
 ```
 
