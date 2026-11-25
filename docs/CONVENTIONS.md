@@ -103,7 +103,7 @@ cardSets.map((set) =>
 - `.env*`의 값은 커밋하지 않는다 (키 이름만 있는 `.env.example`은 예외).
 
 ### 메시지
-- 형식: `종류: 한국어 설명` (Conventional Commits). PR 제목도 같다.
+- 형식: `종류: 한국어 설명` (Conventional Commits)
 - 종류는 소문자. 설명은 명사로 끝내고 마침표를 찍지 않는다.
 - 파일 이름보다 무엇이 달라졌는지를 쓴다.
 
@@ -123,6 +123,10 @@ cardSets.map((set) =>
 3. `docs`: 바뀐 구조와 규칙 반영
 
 패키지 추가가 기능의 전부면 `feat` 하나로 묶는다 (`feat: Vercel Analytics 추가`).
+
+### PR 제목
+- 형식: `[브랜치명] 내용` (`[chore/#1] GitHub Actions CI와 PR 템플릿 추가`)
+- 브랜치명은 6장의 이름 형식을 따르고, 내용은 커밋 설명과 같은 방식으로 쓴다.
 
 ## 6. 브랜치
 
