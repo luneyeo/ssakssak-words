@@ -13,15 +13,16 @@ export const partOfSpeechSchema = z.enum([
   "기타",
 ]) satisfies z.ZodType<PartOfSpeech>;
 
+// 설명(describe)은 AI에 보내는 JSON 스키마에 그대로 들어간다
 // level은 아직 쓰지 않는 필드라, AI 응답 스키마에는 넣지 않고 저장용 스키마에서만 허용한다
 export const generatedCardSchema = z.object({
-  word: z.string().min(1),
-  lemma: z.string().min(1),
-  meaning: z.string().min(1),
+  word: z.string().min(1).describe("원문에 등장한 형태"),
+  lemma: z.string().min(1).describe("사전 기본형"),
+  meaning: z.string().min(1).describe("문맥상 한국어 뜻"),
   partOfSpeech: partOfSpeechSchema,
-  context: z.string().min(1),
-  example: z.string().min(1),
-  exampleTranslation: z.string().min(1),
+  context: z.string().min(1).describe("원문 문장 그대로"),
+  example: z.string().min(1).describe("새 예문"),
+  exampleTranslation: z.string().min(1).describe("예문 번역"),
 }) satisfies z.ZodType<GeneratedCard>;
 
 export const cardResponseSchema = z.object({
