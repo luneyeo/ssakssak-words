@@ -72,6 +72,7 @@ describe("POST /api/cards", () => {
 
   it.each<[ErrorCode, number]>([
     ["RATE_LIMITED", 429],
+    ["TOO_MANY_REQUESTS", 503],
     ["AI_ERROR", 502],
     ["PARSE_ERROR", 502],
   ])("제공자가 %s를 던지면 %d로 응답한다", async (code, status) => {

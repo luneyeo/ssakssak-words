@@ -101,15 +101,19 @@ describe("그 외의 글", () => {
 });
 
 describe("에러 요청", () => {
-  it.each(["INVALID_INPUT", "TEXT_TOO_LONG", "RATE_LIMITED", "AI_ERROR", "PARSE_ERROR"])(
-    "!error:%s이면 해당 에러를 던진다",
-    async (code) => {
-      const promise = mockProvider.generateCards({ text: `!error:${code}`, language: "영어" });
-      const expectation = expect(promise).rejects.toMatchObject({ code });
-      await jest.advanceTimersByTimeAsync(MAX_DELAY_MS);
-      await expectation;
-    },
-  );
+  it.each([
+    "INVALID_INPUT",
+    "TEXT_TOO_LONG",
+    "RATE_LIMITED",
+    "TOO_MANY_REQUESTS",
+    "AI_ERROR",
+    "PARSE_ERROR",
+  ])("!error:%s이면 해당 에러를 던진다", async (code) => {
+    const promise = mockProvider.generateCards({ text: `!error:${code}`, language: "영어" });
+    const expectation = expect(promise).rejects.toMatchObject({ code });
+    await jest.advanceTimersByTimeAsync(MAX_DELAY_MS);
+    await expectation;
+  });
 
   it("모르는 코드는 일반 글로 다룬다", async () => {
     expect(await generateWords("!error:UNKNOWN")).toEqual(["error", "UNKNOWN"]);

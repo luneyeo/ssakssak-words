@@ -99,18 +99,29 @@ describe("응답", () => {
 
 describe("호출 실패", () => {
   it.each([
-    [429, "RATE_LIMITED"],
+    [429, "TOO_MANY_REQUESTS"],
     [400, "AI_ERROR"],
     [401, "AI_ERROR"],
     [403, "AI_ERROR"],
     [404, "AI_ERROR"],
     [500, "AI_ERROR"],
-    [503, "AI_ERROR"],
+    [503, "TOO_MANY_REQUESTS"],
   ])("HTTP %d이면 %s를 던지고 새 요청을 만들지 않는다", async (status, code) => {
     create.mockRejectedValue(Object.assign(new Error("failed"), { status }));
 
     await expect(generate()).rejects.toMatchObject({ code });
     expect(create).toHaveBeenCalledTimes(1);
+  });
+
+  it.each([
+    ["하루 한도", '{"error":{"code":"quota_exceeded"}}', "RATE_LIMITED"],
+    ["하루 한도(예전 형식)", '[{"quotaId":"GenerateRequestsPerDayPerProject"}]', "RATE_LIMITED"],
+    ["분당 한도", '{"error":{"code":"rate_limit_exceeded"}}', "TOO_MANY_REQUESTS"],
+    ["짧은 시간에 많은 요청", '{"error":{"code":"too_many_requests"}}', "TOO_MANY_REQUESTS"],
+    ["알 수 없는 본문", "<html>", "TOO_MANY_REQUESTS"],
+  ])("429 %s 초과를 구분한다", async (_, body, code) => {
+    create.mockRejectedValue(Object.assign(new Error("failed"), { status: 429, body }));
+    await expect(generate()).rejects.toMatchObject({ code });
   });
 
   it("상태 코드가 없는 에러(연결 실패, 시간 초과)는 AI_ERROR로 바꾼다", async () => {
@@ -123,7 +134,7 @@ describe("호출 실패", () => {
       .mockResolvedValueOnce(mockOutput("not json"))
       .mockRejectedValueOnce(Object.assign(new Error("limit"), { status: 429 }));
 
-    await expect(generate()).rejects.toMatchObject({ code: "RATE_LIMITED" });
+    await expect(generate()).rejects.toMatchObject({ code: "TOO_MANY_REQUESTS" });
   });
 
   it("로그에 원문과 키를 남기지 않는다", async () => {

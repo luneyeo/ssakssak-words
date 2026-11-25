@@ -5,6 +5,7 @@ import type { GoogleGenAIRequestOptions } from "@google/genai";
 
 import { CARD_RESPONSE_JSON_SCHEMA } from "@/lib/ai/cardJsonSchema";
 import { CardGenerationError } from "@/lib/ai/errors";
+import type { ErrorCode } from "@/lib/ai/errors";
 import { generateValidCards } from "@/lib/ai/postprocess";
 import { createUserMessage, SYSTEM_PROMPT } from "@/lib/ai/prompts";
 import type { GenerateCardsInput, WordCardProvider } from "@/lib/ai/types";
@@ -20,6 +21,9 @@ const REQUEST_OPTIONS = {
     retryConnectionErrors: false,
   },
 } satisfies GoogleGenAIRequestOptions;
+
+// 앞은 Interactions API, 뒤는 예전 형식(quotaId)의 하루 한도 표시다
+const DAILY_QUOTA_PATTERN = /quota_exceeded|PerDay/;
 
 type GeminiConfig = { apiKey: string; model: string };
 
@@ -58,8 +62,20 @@ async function requestText(
     const status = getStatus(error);
     // 에러 메시지에는 원문이 섞일 수 있어, 원인을 찾을 수 있는 상태 코드만 남긴다
     console.error("[gemini] 호출 실패", status ?? (error instanceof Error ? error.name : ""));
-    throw new CardGenerationError(status === 429 ? "RATE_LIMITED" : "AI_ERROR");
+    throw new CardGenerationError(toErrorCode(status, error));
   }
+}
+
+function toErrorCode(status: number | undefined, error: unknown): ErrorCode {
+  if (status === 429) return isDailyQuotaError(error) ? "RATE_LIMITED" : "TOO_MANY_REQUESTS";
+  if (status === 503) return "TOO_MANY_REQUESTS";
+  return "AI_ERROR";
+}
+
+// 하루 한도와 분당 한도가 모두 429라 본문으로 구분
+function isDailyQuotaError(error: unknown): boolean {
+  if (typeof error !== "object" || error === null || !("body" in error)) return false;
+  return typeof error.body === "string" && DAILY_QUOTA_PATTERN.test(error.body);
 }
 
 function getStatus(error: unknown): number | undefined {
