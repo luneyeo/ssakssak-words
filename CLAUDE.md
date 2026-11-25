@@ -50,6 +50,7 @@
 | 린트·포맷 | ESLint + Prettier (import 순서는 `eslint-plugin-import-x`로 검사) |
 | 패키지 매니저 | pnpm |
 | 배포 | Vercel (Hobby 플랜) |
+| 방문 통계 | Vercel Web Analytics (`@vercel/analytics`) |
 
 > 테스트 도구는 Jest만 사용합니다. Vitest 등 다른 테스트 러너는 설치하지 않습니다.
 

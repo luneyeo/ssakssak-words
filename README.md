@@ -21,7 +21,7 @@
 | AI | Google Gemini (`@google/genai`, 구조화 출력) |
 | 검증 | zod |
 | 테스트 | Jest, React Testing Library |
-| 배포 | Vercel |
+| 배포 | Vercel, Vercel Web Analytics |
 
 ## 설계에서 신경 쓴 점
 

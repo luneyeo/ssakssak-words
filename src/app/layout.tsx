@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
 
+import { Analytics } from "@vercel/analytics/next";
 import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
 
 import "./globals.css";
@@ -17,7 +18,10 @@ type RootLayoutProps = {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="ko" className="motion-safe:scroll-smooth" data-scroll-behavior="smooth">
-      <body className="font-sans antialiased">{children}</body>
+      <body className="font-sans antialiased">
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
