@@ -11,9 +11,15 @@ export async function POST(request: Request): Promise<Response> {
   if (!parsed.success) return errorResponse("INVALID_INPUT");
   if (parsed.data.text.length > MAX_TEXT_LENGTH) return errorResponse("TEXT_TOO_LONG");
 
+  const startedAt = Date.now();
+
   try {
     const provider = getWordCardProvider();
     const cards = await provider.generateCards(parsed.data);
+    // 어느 제공자가 응답했는지 서버 콘솔에서 확인할 수 있게 하되, 원문은 남기지 않는다
+    console.info(
+      `[api/cards] ${provider.name} 카드 ${cards.length}개 생성 (${Date.now() - startedAt}ms)`,
+    );
     return Response.json({ cards, provider: provider.name });
   } catch (error) {
     const code = error instanceof CardGenerationError ? error.code : "AI_ERROR";

@@ -29,6 +29,7 @@ beforeEach(() => {
   generateCards.mockReset().mockResolvedValue([]);
   jest.mocked(getWordCardProvider).mockReturnValue({ name: "mock", generateCards });
   jest.spyOn(console, "error").mockImplementation(() => {});
+  jest.spyOn(console, "info").mockImplementation(() => {});
 });
 
 afterEach(() => {
@@ -42,6 +43,14 @@ describe("POST /api/cards", () => {
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ cards: [], provider: "mock" });
     expect(generateCards).toHaveBeenCalledWith({ text: "Hello", language: "영어" });
+  });
+
+  it("응답한 제공자를 로그에 남기되, 원문은 남기지 않는다", async () => {
+    await post({ text: "my secret text", language: "영어" });
+
+    const logs = JSON.stringify(jest.mocked(console.info).mock.calls);
+    expect(logs).toContain("mock 카드 0개");
+    expect(logs).not.toContain("secret");
   });
 
   it.each([
