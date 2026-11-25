@@ -41,7 +41,7 @@ export function TextInputForm({ isLoading, onSubmit }: TextInputFormProps) {
         value={text}
         placeholder="외국어 글이나 문장을 붙여넣어 주세요"
         aria-invalid={isTooLong}
-        aria-describedby="source-text-length"
+        aria-describedby="source-text-length source-text-privacy"
         onChange={(event) => setText(event.target.value)}
       />
       <p
@@ -50,6 +50,9 @@ export function TextInputForm({ isLoading, onSubmit }: TextInputFormProps) {
       >
         {isTooLong && `${ERROR_DETAILS.TEXT_TOO_LONG.message} · `}
         {textLength.toLocaleString("ko-KR")} / {MAX_TEXT_LENGTH.toLocaleString("ko-KR")}자
+      </p>
+      <p id="source-text-privacy" className="text-text-muted text-sm">
+        입력한 글은 AI가 처리해요. 개인정보가 담긴 글은 넣지 말아 주세요
       </p>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <label className="flex items-center gap-3">
