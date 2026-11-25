@@ -69,9 +69,9 @@ AI_PROVIDER=mock     # mock | gemini (기본값 mock)
 
 # Phase 4부터
 GEMINI_API_KEY=      # 서버 전용
-GEMINI_MODEL=        # 선택, 기본값 gemini-3.5-flash (최신 무료 Flash 모델로 변경 가능)
+GEMINI_MODEL=        # gemini를 쓸 때 필수 (예: gemini-3.5-flash-lite)
 ```
-- `AI_PROVIDER`가 없거나 키가 비어 있으면 **mock으로 동작**해야 합니다. 키 없이도 앱 전체가 실행되어야 합니다.
+- `AI_PROVIDER`가 없거나, 키 또는 `GEMINI_MODEL`이 비어 있으면 **mock으로 동작**해야 합니다. 키 없이도 앱 전체가 실행되어야 합니다.
 - `.env.example`에는 키 이름만 적고 값은 비워 둡니다.
 - API 키에 `NEXT_PUBLIC_` 접두사를 **절대** 붙이지 않습니다.
 - 키는 `.env.local`에만 둡니다. 셸 설정 파일(`.zshrc` 등)에 `export`하지 않습니다.

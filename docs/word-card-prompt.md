@@ -122,12 +122,16 @@ export const CARD_RESPONSE_JSON_SCHEMA = {
 
 | 항목 | 값 |
 |---|---|
-| SDK | `@google/genai` |
-| 모델 | 환경 변수 `GEMINI_MODEL` (기본값 `gemini-3.5-flash`, 무료 티어에서 쓸 수 있는 최신 Flash 모델로 교체 가능) |
+| SDK | `@google/genai`의 Interactions API (`client.interactions.create`) |
+| 모델 | 환경 변수 `GEMINI_MODEL` (필수, 코드에 기본값을 두지 않음. 예: 무료 티어에서 쓸 수 있는 `gemini-3.5-flash-lite`) |
 | 시스템 프롬프트 | 1장 내용을 시스템 지시(system instruction)로 전달 |
 | 사용자 메시지 | 2장 템플릿 |
-| 응답 형식 | MIME 타입 `application/json` + 3장 JSON 스키마를 응답 스키마로 지정 (구조화 출력) |
-| 응답 꺼내기 | 응답 텍스트를 `JSON.parse` → 5장 후처리 |
+| 응답 형식 | `response_format`에 MIME 타입 `application/json` + 3장 JSON 스키마를 지정 (구조화 출력) |
+| 보관 | `store: false` (기본값은 요청과 응답을 구글 서버에 보관) |
+| 시간 제한 | 시도 한 번에 60초 |
+| 호출 재시도 | 과부하(503)만 최대 2회. 5장의 검증 실패 재시도와는 별개 |
+| 에러 변환 | HTTP 429 → `RATE_LIMITED`, 그 밖의 실패 → `AI_ERROR` |
+| 응답 꺼내기 | `interaction.output_text`를 `JSON.parse` → 5장 후처리 |
 
 > ⚠️ Gemini SDK의 구조화 출력 설정 이름(예: 응답 스키마를 넘기는 옵션 이름)은 버전에 따라 바뀝니다. 구현 전에 ai.google.dev의 **Structured outputs** 문서에서 JavaScript 예제를 확인하고 그대로 따릅니다.
 
