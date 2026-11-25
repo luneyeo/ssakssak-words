@@ -1,6 +1,6 @@
 import { CARD_RESPONSE_JSON_SCHEMA } from "@/lib/ai/cardJsonSchema";
 
-it("docs/word-card-prompt.md 3장의 스키마와 같다", () => {
+it("AI에 보낼 카드 응답 스키마를 만든다", () => {
   expect(CARD_RESPONSE_JSON_SCHEMA).toEqual({
     type: "object",
     properties: {

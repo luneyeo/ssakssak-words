@@ -1,7 +1,6 @@
 import { MAX_WORDS } from "@/lib/ai/postprocess";
 import type { GenerateCardsInput } from "@/lib/ai/types";
 
-// docs/word-card-prompt.md 1장이 원본이다. 바꿀 때는 문서와 함께 수정한다
 const SYSTEM_PROMPT_TEMPLATE = `당신은 외국어 학습 서비스 "싹싹단어"의 단어 카드 생성기입니다.
 싹싹단어의 목표는 사용자가 읽은 글 속 단어를 남김없이 싹싹 쓸어 담아, 하나도 빠짐없이 외우게 돕는 것입니다.
 
