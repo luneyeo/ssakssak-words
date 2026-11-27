@@ -9,22 +9,24 @@ AI 에이전트용 구조·데이터·API·기술 스택 명세. 어떤 장을 �
 ```
 src/
 ├─ app/                        # Next.js 라우트. views를 불러 내보내기만 한다
-│  ├─ layout.tsx
+│  ├─ layout.tsx               # 모든 페이지 공통 <main> 여백
 │  ├─ page.tsx                 # views/home
 │  ├─ cards/page.tsx           # views/cards (+ metadata)
 │  └─ api/cards/route.ts       # POST: 단어 카드 생성 (선택된 AI 제공자 호출)
 ├─ views/                      # FSD pages 레이어: widgets를 페이지 단위로 조립
-│  ├─ home/ui/HomePage.tsx     # SiteHeader + HomeHero + CardGenerator
-│  └─ cards/ui/CardsPage.tsx   # SavedCardSets
+│  ├─ home/ui/HomePage.tsx     # SiteHeader(main) + HomeHero + CardGenerator
+│  └─ cards/ui/CardsPage.tsx   # SiteHeader(cards) + SavedCardSets
 ├─ widgets/                    # features·entities를 화면 블록으로 조립
 │  ├─ site-header/ui/
-│  │  ├─ SiteHeader.tsx        # 로고 + 담은 단어 링크
-│  │  └─ SavedWordsLink.tsx    # "담은 단어" 링크 + 개수 배지
+│  │  ├─ SiteHeader.tsx        # 로고 + 오른쪽 링크 (page가 main이면 담은 단어, cards면 단어 담으러 가기)
+│  │  ├─ SavedWordsLink.tsx    # "담은 단어" 링크 + 개수 배지
+│  │  └─ AddToWordsLink.tsx    # "단어 담으러 가기" 링크
 │  ├─ home-hero/ui/HomeHero.tsx  # 서비스 소개 제목·설명
 │  ├─ card-generator/ui/CardGenerator.tsx  # 입력 카드 + 결과 영역, 결과 저장
 │  └─ saved-card-sets/ui/
 │     ├─ SavedCardSets.tsx     # 저장한 세트 목록, 삭제
-│     └─ SavedCardSetItem.tsx
+│     ├─ SavedCardSetItem.tsx
+│     └─ CardsHero.tsx         # 모아보기 제목 + 모은 문장·단어 수
 ├─ features/                   # 사용자 행동
 │  └─ generate-cards/          # 카드 만들기 (직접 입력, 예시 글 고르기)
 │     ├─ model/useGenerateCards.ts
@@ -90,7 +92,7 @@ README.md                      # 프로젝트 소개, 실행 방법
 - FSD(Feature-Sliced Design)를 따른다. 레이어는 위에서부터 `views` → `widgets` → `features` → `entities` → `shared` 순서다. FSD의 pages 레이어는 Next.js의 `src/pages`(Pages Router)와 겹치지 않도록 `views`라고 부른다.
 - 레이어는 **자기보다 아래 레이어만** import한다. 같은 레이어의 다른 슬라이스(예: `features/a` → `features/b`)도 import하지 않는다.
 - `app`은 라우트 파일만 둔다. 화면은 `views`의 페이지 컴포넌트를 내보내기만 하고, `metadata`처럼 Next.js가 요구하는 것만 직접 쓴다.
-- `views`는 `widgets`를 조립하고 페이지 여백 같은 배치만 맡는다.
+- `views`는 `widgets`를 조립만 한다. 페이지 여백(`<main>`)은 모든 페이지가 같아서 `app/layout.tsx`가 맡는다.
 - `widgets`는 `features`와 `entities`를 조립한 화면 블록이다. 여러 feature에 걸친 상태(예: 생성 결과 저장)는 widget에서 잇는다.
 - `features`는 사용자 행동(카드 만들기 등) 하나를 맡는다.
 - `entities`는 도메인 데이터(타입, 스키마, 저장소)와 그것을 보여 주는 UI를 둔다.
