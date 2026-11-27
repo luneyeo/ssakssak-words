@@ -23,11 +23,15 @@ src/
 │  │  └─ AddToWordsLink.tsx    # "단어 담으러 가기" 링크
 │  ├─ home-hero/ui/HomeHero.tsx  # 서비스 소개 제목·설명
 │  ├─ card-generator/ui/CardGenerator.tsx  # 입력 카드 + 결과 영역, 결과 저장
-│  └─ saved-card-sets/ui/
-│     ├─ SavedCardSets.tsx     # 저장한 세트 목록, 삭제
-│     ├─ SavedCardSetItem.tsx
-│     └─ CardsHero.tsx         # 모아보기 제목 + 모은 문장·단어 수
+│  └─ saved-card-sets/
+│     ├─ model/useLanguageFilter.ts  # 언어별 탭 목록, 고른 언어로 세트 거르기
+│     └─ ui/
+│        ├─ SavedCardSets.tsx  # 제목, 언어별 탭, 세트 목록 조립
+│        ├─ SavedCardSetItem.tsx
+│        └─ CardsHero.tsx      # 모아보기 제목 + 모은 문장·단어 수
 ├─ features/                   # 사용자 행동
+│  ├─ delete-card-set/         # 카드 세트 지우기
+│  │  └─ model/useDeleteCardSet.ts  # 확인 창, 결과 안내 문구, 지운 뒤 콜백
 │  └─ generate-cards/          # 카드 만들기 (직접 입력, 예시 글 고르기)
 │     ├─ model/useGenerateCards.ts
 │     └─ ui/
@@ -45,7 +49,9 @@ src/
 │     │  ├─ schema.ts          # zod 스키마
 │     │  ├─ constants.ts       # 글자 수 제한, 지원 언어
 │     │  ├─ savedCardSets.ts   # 카드 세트 저장·삭제·읽기
-│     │  └─ useSavedCards.ts
+│     │  ├─ useSavedCards.ts
+│     │  ├─ countWords.ts      # 세트들의 단어(카드) 수 합계
+│     │  └─ compareLanguages.ts  # 언어 선택 목록 순서로 언어 정렬
 │     ├─ config/
 │     │  └─ demoArticles.ts    # 예시 글 + 미리 만든 카드 결과 (3개)
 │     └─ ui/
@@ -70,7 +76,7 @@ src/
    ├─ icons/                   # 모든 SVG 아이콘. 한 파일에 하나, index.ts로 한 번에 내보냄
    ├─ styles/
    │  └─ globals.css           # 디자인 토큰, 전역 스타일 (layout.tsx에서 불러옴)
-   ├─ ui/                      # Button, Textarea, Select, Spinner, Chip, TextLink, ErrorNotice, StatusNotice 등 공용 UI
+   ├─ ui/                      # Button, Textarea, Select, Spinner, Chip, TextLink, ErrorNotice, StatusNotice, Tabs 등 공용 UI
    └─ lib/
       ├─ storage.ts            # localStorage 래퍼
       ├─ text.ts               # 하이라이트용 텍스트 유틸
