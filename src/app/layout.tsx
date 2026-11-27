@@ -19,7 +19,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="ko" className="motion-safe:scroll-smooth" data-scroll-behavior="smooth">
       <body className="font-sans antialiased">
-        {children}
+        <main className="mx-auto w-full max-w-3xl px-5 pt-7 pb-24">{children}</main>
         <Analytics />
       </body>
     </html>

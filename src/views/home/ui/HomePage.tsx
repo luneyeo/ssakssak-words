@@ -4,10 +4,10 @@ import { SiteHeader } from "@/widgets/site-header/ui/SiteHeader";
 
 export function HomePage() {
   return (
-    <main className="mx-auto w-full max-w-3xl px-5 pt-7 pb-24">
-      <SiteHeader />
+    <>
+      <SiteHeader page="main" />
       <HomeHero />
       <CardGenerator />
-    </main>
+    </>
   );
 }

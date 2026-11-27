@@ -2,10 +2,10 @@
 
 import { useRef, useState } from "react";
 
-import { TextLink } from "@/shared/ui/TextLink";
 import { SavedCardSetItem } from "@/widgets/saved-card-sets/ui/SavedCardSetItem";
 import { useSavedCards } from "@/entities/word-card/model/useSavedCards";
 import { deleteCardSet } from "@/entities/word-card/model/savedCardSets";
+import { CardsHero } from "@/widgets/saved-card-sets/ui/CardsHero";
 
 export function SavedCardSets() {
   const { cardSets, isLoaded } = useSavedCards();
@@ -23,19 +23,8 @@ export function SavedCardSets() {
 
   return (
     <div className="flex flex-col gap-8">
-      <header className="flex flex-wrap items-center gap-3">
-        <h1
-          ref={headingRef}
-          tabIndex={-1}
-          className="text-primary-strong text-3xl font-bold outline-none"
-        >
-          담은 단어 모아보기
-        </h1>
-        <span className="ml-auto">
-          <TextLink href="/">단어 담으러 가기</TextLink>
-        </span>
-      </header>
-
+      <CardsHero cards={cardSets} headingRef={headingRef} />
+      {/* TODO StatusNotice 활용해서 삭제 안내 컴포넌트 생성하기 */}
       <p role="status" className="text-text-muted empty:hidden">
         {message}
       </p>
