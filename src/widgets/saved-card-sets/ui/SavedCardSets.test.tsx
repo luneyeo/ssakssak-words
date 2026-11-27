@@ -10,6 +10,7 @@ import {
 } from "@/entities/word-card/model/savedCardSets";
 
 const [SHORT, IDIOM] = DEMO_ARTICLES.map(({ cardSet }) => cardSet);
+const GERMAN = { ...SHORT, id: "german", title: "Guten Morgen", language: "독일어", isDemo: false };
 const EMPTY_MESSAGE = "아직 담은 단어가 없어요. 글을 붙여넣어 보세요!";
 
 const confirmMock = jest.fn();
@@ -28,6 +29,73 @@ describe("SavedCardSets", () => {
   it("저장한 카드가 없으면 빈 상태를 안내한다", () => {
     render(<SavedCardSets />);
     expect(screen.getByText(EMPTY_MESSAGE)).toBeInTheDocument();
+    expect(screen.queryByRole("tablist")).not.toBeInTheDocument();
+  });
+
+  it("저장한 언어별 탭과 세트 수를 보여 주고, 고른 언어의 세트만 보여 준다", async () => {
+    const user = userEvent.setup();
+    saveCardSet(GERMAN);
+    saveCardSet(SHORT);
+    saveCardSet(IDIOM);
+    render(<SavedCardSets />);
+
+    const tabs = screen.getAllByRole("tab");
+    expect(tabs.map((tab) => tab.getAttribute("aria-label"))).toEqual([
+      "전체 3개",
+      "영어 2개",
+      "독일어 1개",
+    ]);
+    expect(tabs[0]).toHaveAttribute("aria-selected", "true");
+    expect(screen.getAllByRole("article")).toHaveLength(3);
+
+    await user.click(screen.getByRole("tab", { name: "독일어 1개" }));
+
+    expect(screen.getByRole("tab", { name: "독일어 1개" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    const panel = screen.getByRole("tabpanel", { name: "독일어 1개" });
+    expect(within(panel).getAllByRole("article")).toHaveLength(1);
+    expect(panel).toHaveTextContent("Guten Morgen");
+  });
+
+  it("방향키와 Home, End로 탭을 옮기면 바로 고르고, Tab 순서에는 고른 탭만 둔다", async () => {
+    const user = userEvent.setup();
+    saveCardSet(GERMAN);
+    saveCardSet(SHORT);
+    render(<SavedCardSets />);
+
+    await user.tab();
+    expect(screen.getByRole("tab", { name: "전체 2개" })).toHaveFocus();
+
+    await user.keyboard("{ArrowLeft}");
+    const german = screen.getByRole("tab", { name: "독일어 1개" });
+    expect(german).toHaveFocus();
+    expect(german).toHaveAttribute("aria-selected", "true");
+
+    await user.keyboard("{Home}");
+    expect(screen.getByRole("tab", { name: "전체 2개" })).toHaveAttribute("aria-selected", "true");
+    await user.keyboard("{End}");
+    expect(german).toHaveAttribute("aria-selected", "true");
+    expect(screen.getAllByRole("tab").map((tab) => tab.getAttribute("tabindex"))).toEqual([
+      "-1",
+      "-1",
+      "0",
+    ]);
+  });
+
+  it("고른 언어의 세트를 모두 지우면 전체 탭으로 돌아간다", async () => {
+    const user = userEvent.setup();
+    saveCardSet(GERMAN);
+    saveCardSet(SHORT);
+    render(<SavedCardSets />);
+
+    await user.click(screen.getByRole("tab", { name: "독일어 1개" }));
+    await user.click(screen.getByRole("button", { name: `${GERMAN.title} 삭제` }));
+
+    expect(screen.queryByRole("tab", { name: /독일어/ })).not.toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "전체 1개" })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getAllByRole("article")).toHaveLength(1);
   });
 
   it("저장한 세트를 최근 순서로 보여 준다", () => {
