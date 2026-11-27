@@ -10,7 +10,10 @@ type SettledState =
   | { status: "success"; cardSet: CardSet; isDemoMode: boolean }
   | { status: "error"; message: string }
   // 서버까지 닿지 못한 경우라, 서버가 정한 문구 대신 연결을 확인하라고 안내한다
-  | { status: "requestError" };
+  | { status: "requestError" }
+  // 아래 두 경우는 해결 방법이 달라(내일 다시 / 잠시 후 다시) 화면에서 각자 다른 안내를 보여 준다
+  | { status: "rateLimited" }
+  | { status: "busy" };
 
 export type GenerateCardsState = { status: "idle" } | { status: "loading" } | SettledState;
 
@@ -72,7 +75,10 @@ async function requestCards(input: GenerateCardsInput, signal: AbortSignal): Pro
     const body: unknown = await response.json();
 
     if (!response.ok) {
-      return { status: "error", message: cardsApiErrorSchema.parse(body).error.message };
+      const { code, message } = cardsApiErrorSchema.parse(body).error;
+      if (code === "RATE_LIMITED") return { status: "rateLimited" };
+      if (code === "TOO_MANY_REQUESTS") return { status: "busy" };
+      return { status: "error", message };
     }
 
     const { cards, provider } = cardsApiSuccessSchema.parse(body);

@@ -219,12 +219,43 @@ describe("저장", () => {
 
 describe("에러", () => {
   it("서버가 보낸 문구를 보여 주고 입력한 글은 남겨 둔다", async () => {
-    const message = "오늘 담을 수 있는 양을 다 썼어요. 예시 글로 체험해 보세요!";
-    fetchMock.mockResolvedValue(mockResponse({ error: { code: "RATE_LIMITED", message } }, 429));
+    const message = "글을 입력하고 언어를 선택해 주세요";
+    fetchMock.mockResolvedValue(mockResponse({ error: { code: "INVALID_INPUT", message } }, 400));
     await submitText();
 
     expect(await screen.findByRole("alert")).toHaveTextContent(message);
     expect(screen.getByLabelText("외국어 글")).toHaveValue("The weather is gorgeous.");
+  });
+
+  it("하루 한도를 넘으면 안내하고, 예시 글 결과를 API 없이 바로 보여 준다", async () => {
+    fetchMock.mockResolvedValue(
+      mockResponse({ error: { code: "RATE_LIMITED", message: "한도 초과" } }, 429),
+    );
+    const user = await submitText();
+
+    expect(await screen.findByRole("alert")).toHaveTextContent("오늘 담을 수 있는 양을 다 썼어요");
+    expect(screen.queryByRole("button", { name: "다시 시도" })).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "예시 글로 체험하기" }));
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(getCards()).toHaveLength(5);
+    expect(screen.getByLabelText("외국어 글")).toHaveValue("The weather is gorgeous.");
+  });
+
+  it("요청이 몰리면 안내하고, 다시 시도하면 같은 글로 다시 요청한다", async () => {
+    fetchMock.mockResolvedValueOnce(
+      mockResponse({ error: { code: "TOO_MANY_REQUESTS", message: "요청 몰림" } }, 503),
+    );
+    const user = await submitText();
+
+    expect(await screen.findByRole("alert")).toHaveTextContent("요청이 너무 많아요");
+
+    fetchMock.mockResolvedValueOnce(mockResponse({ cards: [CARD], provider: "gemini" }));
+    await user.click(screen.getByRole("button", { name: "다시 시도" }));
+
+    await waitForSuccessMessage(1);
+    expect(fetchMock.mock.calls[1][1].body).toBe(fetchMock.mock.calls[0][1].body);
   });
 
   it("연결에 실패하면 안내하고, 다시 시도하면 같은 글로 다시 요청한다", async () => {
