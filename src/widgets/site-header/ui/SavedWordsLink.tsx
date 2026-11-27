@@ -3,11 +3,12 @@
 import Link from "next/link";
 
 import { BookmarkIcon } from "@/shared/icons";
+import { countWords } from "@/entities/word-card/model/countWords";
 import { useSavedCards } from "@/entities/word-card/model/useSavedCards";
 
 export function SavedWordsLink() {
   const { cardSets, isLoaded } = useSavedCards();
-  const wordCount = cardSets.reduce((sum, cardSet) => sum + cardSet.cards.length, 0);
+  const wordCount = countWords(cardSets);
   const hasBadge = isLoaded && wordCount > 0;
 
   return (

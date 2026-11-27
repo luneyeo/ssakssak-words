@@ -1,5 +1,6 @@
 import type { Ref } from "react";
 
+import { countWords } from "@/entities/word-card/model/countWords";
 import type { CardSet } from "@/entities/word-card/model/types";
 
 type CardsHeroProps = {
@@ -8,7 +9,7 @@ type CardsHeroProps = {
 };
 
 export function CardsHero({ cards, headingRef }: CardsHeroProps) {
-  const countWords = cards.reduce((acc, cur) => acc + cur.cards.length, 0);
+  const wordCount = countWords(cards);
 
   return (
     <section className="pt-14 pb-7">
@@ -22,7 +23,7 @@ export function CardsHero({ cards, headingRef }: CardsHeroProps) {
       </h1>
       <p className="text-text-muted mt-3">
         문장 <em className="text-text font-bold not-italic">{cards.length}</em>개에서 단어{" "}
-        <em className="text-primary font-bold not-italic">{countWords}</em>개를 모았어요.
+        <em className="text-primary font-bold not-italic">{wordCount}</em>개를 모았어요.
       </p>
     </section>
   );
