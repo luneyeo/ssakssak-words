@@ -1,8 +1,8 @@
-import { MAX_TEXT_LENGTH } from "@/features/word-card/constants";
-import { generateCardsRequestSchema } from "@/features/word-card/schema";
-import { getWordCardProvider } from "@/lib/ai";
-import { CardGenerationError, ERROR_DETAILS } from "@/lib/ai/errors";
-import type { ErrorCode } from "@/lib/ai/errors";
+import { MAX_TEXT_LENGTH } from "@/entities/word-card/model/constants";
+import { generateCardsRequestSchema } from "@/entities/word-card/model/schema";
+import { getWordCardProvider } from "@/ai";
+import { CardGenerationError, ERROR_DETAILS } from "@/ai/errors";
+import type { ErrorCode } from "@/ai/errors";
 
 export async function POST(request: Request): Promise<Response> {
   const body: unknown = await request.json().catch(() => null);

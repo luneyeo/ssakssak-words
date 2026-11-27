@@ -2,12 +2,12 @@
  * @jest-environment node
  */
 import { POST } from "@/app/api/cards/route";
-import { MAX_TEXT_LENGTH } from "@/features/word-card/constants";
-import { getWordCardProvider } from "@/lib/ai";
-import { CardGenerationError } from "@/lib/ai/errors";
-import type { ErrorCode } from "@/lib/ai/errors";
+import { MAX_TEXT_LENGTH } from "@/entities/word-card/model/constants";
+import { getWordCardProvider } from "@/ai";
+import { CardGenerationError } from "@/ai/errors";
+import type { ErrorCode } from "@/ai/errors";
 
-jest.mock("@/lib/ai", () => ({ getWordCardProvider: jest.fn() }));
+jest.mock("@/ai", () => ({ getWordCardProvider: jest.fn() }));
 
 const generateCards = jest.fn();
 

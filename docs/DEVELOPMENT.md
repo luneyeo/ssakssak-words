@@ -20,7 +20,7 @@ pnpm format:check  # Prettier 검사만
 
 ## 2. 환경 변수
 
-적용: `.env.example`, `src/lib/ai/index.ts`, 환경 변수를 읽는 코드
+적용: `.env.example`, `src/ai/index.ts`, 환경 변수를 읽는 코드
 
 ```bash
 AI_PROVIDER=mock     # mock | gemini (기본값 mock)
