@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@theme {
+  /* 디자인 토큰 밖의 색을 쓰지 못하도록 Tailwind 기본 색상을 비운다 */
+  --color-*: initial;
+
+  --color-bg: #f4f5f0;
+  --color-surface: #ffffff;
+  --color-surface-soft: #fbfbf9;
+  --color-border: #e1e5de;
+  --color-border-soft: #eef0eb;
+  --color-text: #17201e;
+  --color-text-muted: #5f6a66;
+  --color-primary: #0f766e;
+  --color-primary-strong: #0b5a54;
+  --color-primary-soft: #d3f2e8;
+  --color-danger: #dc2626;
+  --color-warning: #b45309;
+  --color-warning-soft: #fff8eb;
+  --color-warning-strong: #5c4a2e;
+
+  --font-sans: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+
+  --radius-card: 16px;
+  --radius-control: 12px;
+}
+
+@layer base {
+  /* 모든 인터랙션 요소가 빠짐없이 같은 focus 링을 갖도록 전역으로 둔다.
+     base 레이어라 컴포넌트의 유틸리티 클래스(focus:, outline-none)가 필요할 때 덮어쓸 수 있다 */
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+}
