@@ -11,7 +11,7 @@ AI 에이전트용 코드·커밋·브랜치 규칙. 어떤 장을 읽을지는 
 - 외부 데이터(AI 응답, localStorage, 요청 body, API 응답)는 항상 zod로 검증한다. `as` 단언으로 대신하지 않는다.
 - 객체 모양은 `type`으로 정의한다. `interface` 금지.
 - 타입만 가져올 때는 별도의 `import type` 문을 쓴다.
-- localStorage는 `src/lib/storage.ts`를 통해서만 접근한다.
+- localStorage는 `src/shared/lib/storage.ts`를 통해서만 접근한다.
 
 ### 네이밍
 - 컴포넌트 파일·이름: PascalCase (`WordCard.tsx`)
@@ -35,7 +35,7 @@ AI 에이전트용 코드·커밋·브랜치 규칙. 어떤 장을 읽을지는 
 
 ## 2. 화면
 
-적용: `src/**/*.tsx`, `src/**/hooks/**`
+적용: `src/**/*.tsx`, `src/**/model/use*.ts`
 
 ### 컴포넌트
 - 함수 선언문 + named export (`export function WordCard() {}`). default export는 Next.js가 요구하는 파일(`page.tsx`, `layout.tsx`)에서만 쓴다.
@@ -63,14 +63,14 @@ cardSets.map((set) =>
 
 ### 스타일
 - Tailwind 유틸리티 클래스만 쓴다. 인라인 `style`은 애니메이션 값처럼 꼭 필요할 때만 쓴다.
-- 조건부 클래스는 `cn()`(`src/lib/cn.ts`)을 쓴다.
+- 조건부 클래스는 `cn()`(`src/shared/lib/cn.ts`)을 쓴다.
 - 색상은 `docs/DESIGN.md` 1장의 디자인 토큰만 쓴다. hex 값과 Tailwind 기본 색상 금지.
 
 ## 3. 서버와 보안
 
-적용: `src/app/api/**`, `src/lib/ai/**`, 환경 변수, 서버 로그
+적용: `src/app/api/**`, `src/ai/**`, 환경 변수, 서버 로그
 
-- `src/lib/ai/providers/*`, `src/lib/ai/index.ts` 첫 줄은 `import "server-only";`
+- `src/ai/providers/*`, `src/ai/index.ts` 첫 줄은 `import "server-only";`
 - 클라이언트에서 AI API를 직접 호출하지 않는다. 반드시 `/api/cards`를 거친다.
 - API 키에 `NEXT_PUBLIC_` 접두사 금지.
 - 서버 로그에 사용자 원문 전체나 API 키를 남기지 않는다. 에러 메시지에 섞일 수 있으므로 에러 코드와 `error.name`만 남긴다.
@@ -86,7 +86,7 @@ cardSets.map((set) =>
 - 설정: `next/jest`, `jsdom` 환경, `jest.setup.ts`에서 `@testing-library/jest-dom`, `moduleNameMapper`에 `@/` 별칭.
 - API 라우트 등 서버 환경이 필요한 테스트는 파일 맨 위에 `@jest-environment node`를 적는다.
 - 테스트 파일은 대상 옆에 `*.test.ts(x)`로 둔다.
-- 단위 테스트 필수: 순수 함수(`lib/text.ts`, `lib/storage.ts`, `lib/ai/postprocess.ts`), zod 스키마, mock 제공자
+- 단위 테스트 필수: 순수 함수(`shared/lib/text.ts`, `shared/lib/storage.ts`, `ai/postprocess.ts`), zod 스키마, mock 제공자
 - `demoArticles.ts`가 zod 스키마를 통과하는지 테스트한다.
 - 컴포넌트는 핵심 상호작용(카드 뒤집기, 폼 제출, 예시 글 선택, 에러 표시)만 테스트한다.
 - 실제 AI API 호출 금지. Gemini는 `jest.mock`으로 SDK를 대체한다.
