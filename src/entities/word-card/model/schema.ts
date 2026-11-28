@@ -49,7 +49,7 @@ export const cardsApiSuccessSchema = cardResponseSchema.extend({
 });
 
 export const cardsApiErrorSchema = z.object({
-  error: z.object({ message: z.string().min(1) }),
+  error: z.object({ code: z.string(), message: z.string().min(1) }),
 });
 
 // 글자 수 초과는 별도 에러 코드(TEXT_TOO_LONG)로 응답해야 해서 여기서는 검사하지 않는다

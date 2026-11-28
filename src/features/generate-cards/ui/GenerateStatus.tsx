@@ -2,9 +2,9 @@ import { Spinner } from "@/shared/ui/Spinner";
 import { ErrorNotice } from "@/shared/ui/ErrorNotice";
 import type { GenerateCardsState } from "@/features/generate-cards/model/useGenerateCards";
 
-// 단어가 없을 때와 요청이 실패했을 때는 결과 영역 전체를 쓰는 상자로 따로 보여 준다
+// 단어가 없을 때, 요청이 실패했을 때, 한도에 걸렸을 때는 결과 영역 전체를 쓰는 상자로 따로 보여 준다
 type GenerateStatusProps = {
-  state: Exclude<GenerateCardsState, { status: "requestError" }>;
+  state: Exclude<GenerateCardsState, { status: "requestError" | "rateLimited" | "busy" }>;
 };
 
 export function GenerateStatus({ state }: GenerateStatusProps) {

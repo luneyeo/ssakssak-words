@@ -2,8 +2,13 @@ import Link from "next/link";
 
 import { BucketIcon } from "@/shared/icons";
 import { SavedWordsLink } from "@/widgets/site-header/ui/SavedWordsLink";
+import { AddToWordsLink } from "@/widgets/site-header/ui/AddToWordsLink";
 
-export function SiteHeader() {
+type SiteHeaderProps = {
+  page: "main" | "cards";
+};
+
+export function SiteHeader({ page }: SiteHeaderProps) {
   return (
     <header className="flex items-center justify-between gap-4">
       <Link href="/" className={"rounded-control flex items-center gap-2.5"}>
@@ -15,7 +20,7 @@ export function SiteHeader() {
         </span>
         <span className="text-xl font-extrabold tracking-tight">싹싹단어</span>
       </Link>
-      <SavedWordsLink />
+      {page === "main" ? <SavedWordsLink /> : <AddToWordsLink />}
     </header>
   );
 }

@@ -30,14 +30,14 @@ AI 에이전트의 작업 규칙과, 상황별로 읽을 문서를 정한다. �
 |---|---|
 | 모든 작업 | `CLAUDE.md` 1장 |
 | 명령어를 실행하거나 바꿀 때 | `docs/DEVELOPMENT.md` 1장 |
-| 환경 변수나 제공자 선택(`src/lib/ai/index.ts`)을 다룰 때 | `docs/DEVELOPMENT.md` 2장 |
+| 환경 변수나 제공자 선택(`src/ai/index.ts`)을 다룰 때 | `docs/DEVELOPMENT.md` 2장 |
 | 패키지를 추가하거나 도구를 바꿀 때 | `docs/ARCHITECTURE.md` 6장 |
 | 파일을 추가·이동하거나 이름을 바꿀 때 | `docs/ARCHITECTURE.md` 1장 |
 | `src/`의 TypeScript 코드를 만들거나 고칠 때 | `docs/CONVENTIONS.md` 1장 |
 | 컴포넌트(`*.tsx`)나 훅을 만들거나 고칠 때 | `docs/CONVENTIONS.md` 2장, `docs/DESIGN.md` 1~5장 |
 | 색상 토큰이나 `globals.css`를 고칠 때 | `docs/DESIGN.md` 1장, 2장 |
 | 사용자에게 보이는 문구를 고칠 때 (에러 메시지 포함) | `docs/DESIGN.md` 4장 |
-| `src/app/api/`, `src/lib/ai/`를 고치거나 API 키·서버 로그를 다룰 때 | `docs/CONVENTIONS.md` 3장, `docs/ARCHITECTURE.md` 3장, 4장 |
+| `src/app/api/`, `src/ai/`를 고치거나 API 키·서버 로그를 다룰 때 | `docs/CONVENTIONS.md` 3장, `docs/ARCHITECTURE.md` 3장, 4장 |
 | 타입이나 zod 스키마를 바꿀 때 | `docs/ARCHITECTURE.md` 2장 |
 | 화면에서 `/api/cards`를 호출하거나 응답을 다룰 때 | `docs/ARCHITECTURE.md` 4장 |
 | 예시 글 데이터를 바꿀 때 | `docs/ARCHITECTURE.md` 5장 |
