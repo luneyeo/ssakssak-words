@@ -31,7 +31,7 @@ reviews:
         - 외부에서 들어온 데이터(AI 응답, localStorage, 요청 body, API 응답)가 zod 검증 없이 쓰이는지 확인해 주세요.
         - 독스트링이나 코드를 그대로 읽어 주는 주석을 요구하지 마세요.
 
-    - path: "src/lib/ai/**"
+    - path: "src/ai/**"
       instructions: |
         - providers/*와 index.ts 첫 줄에 `import "server-only"`가 있는지 확인해 주세요.
         - 제공자별 코드에는 SDK 호출 방식의 차이만 있어야 합니다. 프롬프트, 스키마, 후처리는 공통 모듈을 써야 합니다.
@@ -54,12 +54,12 @@ reviews:
         - 사용자에게 보이는 문구는 "~해요" 체의 한국어여야 합니다.
         - 근거 없는 useMemo, useCallback을 제안하지 마세요.
 
-    - path: "src/lib/storage.ts"
+    - path: "src/shared/lib/storage.ts"
       instructions: |
         - localStorage는 이 파일에서만 접근해야 합니다.
         - 저장소 접근 불가, 용량 초과, 깨진 데이터에도 앱이 멈추지 않는지 확인해 주세요.
 
-    - path: "src/features/word-card/demo/**"
+    - path: "src/entities/word-card/config/demoArticles*"
       instructions: |
         - 영어 카드의 뜻이 원문 문맥과 맞는지, 예문이 자연스러운지, 번역이 정확한지 확인해 주세요.
         - 품사와 기본형(lemma)이 맞는지, 학습할 단어가 빠지지 않았는지 확인해 주세요.
@@ -99,6 +99,6 @@ knowledge_base:
       - files: "docs/ARCHITECTURE.md"
         applyTo: "src/**,package.json"
       - files: "docs/DESIGN.md"
-        applyTo: "src/**/*.tsx,src/app/globals.css"
+        applyTo: "src/**/*.tsx,src/shared/styles/globals.css"
       - files: "docs/DEVELOPMENT.md"
-        applyTo: "src/lib/ai/**,.env.example"
+        applyTo: "src/ai/**,.env.example"
